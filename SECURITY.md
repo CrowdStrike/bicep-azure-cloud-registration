@@ -10,8 +10,8 @@ We have multiple avenues to receive security-related vulnerability reports.
 
 Please report suspected security vulnerabilities by:
 
-+ Submitting a [bug](https://github.com/CrowdStrike/cs-azure-integration-bicep/issues/new/)
-+ Submitting a [pull request](https://github.com/CrowdStrike/cs-azure-integration-bicep/pulls) to potentially resolve the issue
++ Submitting a [bug](https://github.com/CrowdStrike/bicep-azure-cloud-registration/issues/new/)
++ Submitting a [pull request](https://github.com/CrowdStrike/bicep-azure-cloud-registration/pulls) to potentially resolve the issue
 + Sending an email to __oss-security@crowdstrike.com__
 
 ## Disclosure and mitigation process
@@ -30,7 +30,7 @@ process, involving the following steps:
 
 ## Comments
 
-If you have suggestions on how this process could be improved, please let us know by [summarizing your thoughts in an issue](https://github.com/CrowdStrike/cs-azure-integration-bicep/issues/new/).
+If you have suggestions on how this process could be improved, please let us know by [summarizing your thoughts in an issue](https://github.com/CrowdStrike/bicep-azure-cloud-registration/issues/new/).
 
 <BR/><BR/>
 

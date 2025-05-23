@@ -6,7 +6,7 @@ This is a community-driven, open source project designed to register  Falcon Clo
 
 ## Issue Reporting and Questions
 
-Issues may be reported [here](https://github.com/CrowdStrike/cs-azure-integration-bicep/issues/new/choose) and are used to track bugs, documentation and link updates, enhancement requests and security concerns.
+Issues may be reported [here](https://github.com/CrowdStrike/bicep-azure-cloud-registration/issues/new/choose) and are used to track bugs, documentation and link updates, enhancement requests and security concerns.
 
 ## Support Escalation
 
