@@ -37,10 +37,10 @@ param resourceNamePrefix string
 param resourceNameSuffix string
 
 /* Variables */
-var policyDefinition = json(loadTextContent('../../policies/real-time-visibility-detection/policy.json'))
+var policyDefinition = json(loadTextContent('../../policies/log-ingestion/activity-log-policy.json'))
 
 /* Resources */
-resource csRTVDPolicyDefinition 'Microsoft.Authorization/policyDefinitions@2023-04-01' = {
+resource activityLogPolicyDefinition 'Microsoft.Authorization/policyDefinitions@2023-04-01' = {
   name: '${resourceNamePrefix}policy-cslogact${resourceNameSuffix}'
   properties: {
     displayName: policyDefinition.properties.displayName
@@ -53,7 +53,7 @@ resource csRTVDPolicyDefinition 'Microsoft.Authorization/policyDefinitions@2023-
   }
 }
 
-resource csRTVDPolicyAssignment 'Microsoft.Authorization/policyAssignments@2024-04-01' = {
+resource activityLogPolicyAssignment 'Microsoft.Authorization/policyAssignments@2024-04-01' = {
   name: 'pas-cslogact' // The maximum length is 24 characters
   location: location
   identity: {
@@ -64,7 +64,7 @@ resource csRTVDPolicyAssignment 'Microsoft.Authorization/policyAssignments@2024-
     description: 'Ensures that Activity Log data is send to CrowdStrike for Real Time Visibility and Detection assessment.'
     displayName: 'CrowdStrike Activity Log Collection'
     enforcementMode: 'Default'
-    policyDefinitionId: csRTVDPolicyDefinition.id
+    policyDefinitionId: activityLogPolicyDefinition.id
     parameters: {
       eventHubAuthorizationRuleId: {
         value: eventHubAuthorizationRuleId
@@ -82,16 +82,16 @@ resource csRTVDPolicyAssignment 'Microsoft.Authorization/policyAssignments@2024-
   }
 }
 
-resource csRTVDPolicyRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = [
+resource activityLogPolicyRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = [
   for roleDefinitionId in [
     '749f88d5-cbae-40b8-bcfc-e573ddc772fa' // Monitoring Contributor
     '2a5c394f-5eb7-4d4f-9c8e-e8eae39faebc' // Lab Services Reader
     'f526a384-b230-433a-b45c-95f59c4a2dec' // Azure Event Hubs Data Owner
   ]: {
-    name: guid(csRTVDPolicyAssignment.id, roleDefinitionId)
+    name: guid(activityLogPolicyAssignment.id, roleDefinitionId)
     properties: {
       roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions', roleDefinitionId)
-      principalId: csRTVDPolicyAssignment.identity.principalId
+      principalId: activityLogPolicyAssignment.identity.principalId
       principalType: 'ServicePrincipal'
     }
   }
@@ -103,6 +103,6 @@ module eventHubRoleAssignment 'eventHubRoleAssignment.bicep' = {
   params: {
     eventHubId: eventhubId
     roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions', 'f526a384-b230-433a-b45c-95f59c4a2dec') // Azure Event Hubs Data Owner
-    azurePrincipalId: csRTVDPolicyAssignment.identity.principalId
+    azurePrincipalId: activityLogPolicyAssignment.identity.principalId
   }
 }
