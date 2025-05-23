@@ -1,0 +1,31 @@
+name: Create Bicep template release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Archive Release
+      uses: thedoctor0/zip-release@0.7.6
+      with:
+        type: 'zip'
+        filename: '${{ github.event.repository.name }}-${{ github.ref_name }}.zip'
+        exclusions: '.git/* .github/* .gitignore'
+
+    - name: Create Bicep template release package
+      run: zip -r ${{ github.event.repository.name }}-${{ github.ref_name }}.zip . -x ".git/*" ".github/*" ".gitignore"
+
+    - name: Create Bicep template release
+      uses: softprops/action-gh-release@v2.2.2
+      if: github.ref_type == 'tag'
+      with:
+        files: ${{ github.event.repository.name }}-${{ github.ref_name }}.zip
+        generate_release_notes: true
+        make_latest: "true"
