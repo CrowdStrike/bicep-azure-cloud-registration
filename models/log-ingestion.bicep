@@ -4,15 +4,12 @@
 */
 
 @export()
-@description('Configuration settings for the log ingestion module, which enables monitoring of Azure activity and Entra ID logs')
+@description('Configuration settings for the log ingestion module that enables CrowdStrike to collect and analyze Azure Activity Logs and Entra ID audit logs for security monitoring and threat detection')
 type LogIngestionSettings = {
-  @description('Master toggle for the log ingestion module. When set to false, all related resources will not be deployed.')
-  enabled: bool
-
-  @description('Configuration settings for Azure Activity Log collection and monitoring')
+  @description('Configuration for collecting Azure Activity Logs from subscriptions to monitor resource management activities, administrative actions, and service health events')
   activityLogSettings: ActivityLogSettings?
 
-  @description('Configuration settings for Entra ID log collection and monitoring')
+  @description('Configuration for collecting Entra ID audit and sign-in logs to monitor authentication events, directory changes, and identity-related security activities')
   entraIdLogSettings: EntraIdLogSettings?
 }
 
