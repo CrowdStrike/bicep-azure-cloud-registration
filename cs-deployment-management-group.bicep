@@ -59,9 +59,11 @@ param resourceNamePrefix string = ''
 @description('Optional suffix added to all resource names for organization and identification purposes.')
 param resourceNameSuffix string = ''
 
+@description('Controls whether to enable Real Time Visibility and Detection feature that provides immediate insight into security events and threats across monitored Azure resources')
+param enableRealTimeVisibility bool = false
+
 @description('Configuration settings for the log ingestion module, which enables monitoring of Azure activity and Entra ID logs')
 param logIngestionSettings LogIngestionSettings = {
-  enabled: false
   activityLogSettings: {
     enabled: true
     deployRemediationPolicy: true
@@ -94,6 +96,7 @@ var managementGroups = union(
   []
 ) // remove duplicated values
 var environment = length(env) > 0 ? '-${env}' : env
+var shouldDeployLogIngestion = enableRealTimeVisibility
 
 /* Resources used across modules
 1. Role assignments to the Crowdstrike's app service principal
@@ -112,7 +115,7 @@ module assetInventory 'modules/cs-asset-inventory-mg.bicep' = {
 }
 
 var resourceGroupName = '${resourceNamePrefix}rg-cs${environment}${resourceNameSuffix}'
-module resourceGroup 'modules/common/resourceGroup.bicep' = if (logIngestionSettings.enabled) {
+module resourceGroup 'modules/common/resourceGroup.bicep' = if (shouldDeployLogIngestion) {
   name: '${resourceNamePrefix}cs-rg${environment}${resourceNameSuffix}'
   scope: subscription(csInfraSubscriptionId)
 
@@ -123,7 +126,7 @@ module resourceGroup 'modules/common/resourceGroup.bicep' = if (logIngestionSett
   }
 }
 
-module scriptRunnerIdentity 'modules/cs-script-runner-identity-mg.bicep' = if (logIngestionSettings.enabled) {
+module scriptRunnerIdentity 'modules/cs-script-runner-identity-mg.bicep' = if (shouldDeployLogIngestion) {
   name: '${resourceNamePrefix}cs-script-runner-identity${environment}${resourceNameSuffix}'
 
   params: {
@@ -142,7 +145,7 @@ module scriptRunnerIdentity 'modules/cs-script-runner-identity-mg.bicep' = if (l
   ]
 }
 
-module deploymentScope 'modules/cs-deployment-scope-mg.bicep' = if (logIngestionSettings.enabled) {
+module deploymentScope 'modules/cs-deployment-scope-mg.bicep' = if (shouldDeployLogIngestion) {
   name: '${resourceNamePrefix}cs-deployment-scope${environment}${resourceNameSuffix}'
   params: {
     managementGroupIds: managementGroups
@@ -158,7 +161,7 @@ module deploymentScope 'modules/cs-deployment-scope-mg.bicep' = if (logIngestion
   }
 }
 
-module logIngestion 'modules/cs-log-ingestion-mg.bicep' = if (logIngestionSettings.enabled) {
+module logIngestion 'modules/cs-log-ingestion-mg.bicep' = if (shouldDeployLogIngestion) {
   name: '${resourceNamePrefix}cs-log-mg-deployment${environment}${resourceNameSuffix}'
   params: {
     managementGroupIds: managementGroups
@@ -184,7 +187,7 @@ module logIngestion 'modules/cs-log-ingestion-mg.bicep' = if (logIngestionSettin
   ]
 }
 
-module updateRegistration 'modules/cs-update-registration-rg.bicep' = if (logIngestionSettings.enabled) {
+module updateRegistration 'modules/cs-update-registration-rg.bicep' = if (shouldDeployLogIngestion) {
   name: '${resourceNamePrefix}cs-update-reg-mg${environment}${resourceNameSuffix}'
   scope: az.resourceGroup(csInfraSubscriptionId, resourceGroupName)
   params: {
@@ -205,11 +208,11 @@ module updateRegistration 'modules/cs-update-registration-rg.bicep' = if (logIng
 
 output customReaderRoleNameForSubs array = assetInventory.outputs.customRoleNameForSubs
 output customReaderRoleNameForMGs array = assetInventory.outputs.customRoleNameForMGs
-output activityLogEventHubId string = logIngestionSettings.enabled ? logIngestion.outputs.activityLogEventHubId : ''
-output activityLogEventHubConsumerGroupName string = logIngestionSettings.enabled
+output activityLogEventHubId string = shouldDeployLogIngestion ? logIngestion.outputs.activityLogEventHubId : ''
+output activityLogEventHubConsumerGroupName string = shouldDeployLogIngestion
   ? logIngestion.outputs.activityLogEventHubConsumerGroupName
   : ''
-output entraLogEventHubId string = logIngestionSettings.enabled ? logIngestion.outputs.entraLogEventHubId : ''
-output entraLogEventHubConsumerGroupName string = logIngestionSettings.enabled
+output entraLogEventHubId string = shouldDeployLogIngestion ? logIngestion.outputs.entraLogEventHubId : ''
+output entraLogEventHubConsumerGroupName string = shouldDeployLogIngestion
   ? logIngestion.outputs.entraLogEventHubConsumerGroupName
   : ''
