@@ -1,5 +1,5 @@
 ## CrowdStrike API Client Scopes required:
-## - CSPM Registration (read/write)
+## - Cloud security Azure registration (Write)
 using namespace System.Runtime.Serialization
 
 param (
@@ -80,7 +80,7 @@ function Set-AzureEventHubsInfo {
         Write-Output "Update registration. Url: $($Params.Uri)"
         Write-Output "Update registration. Request body: $($Params.Body)"
         $response = Invoke-WebRequest @Params
-        Write-Output "Update registration sucess. Response: $($response.Content)`n"
+        Write-Output "Update registration success. Response: $($response.Content)`n"
     }
     catch [System.Exception] { 
         Write-Error "An exception was caught: $($_.Exception.Message), $($_.ErrorDetails.Message)"

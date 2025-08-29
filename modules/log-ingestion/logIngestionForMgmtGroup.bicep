@@ -1,4 +1,4 @@
-import { ActivityLogSettings, EntraIdLogSettings } from '../../models/log-ingestion.bicep'
+import { ActivityLogSettings } from '../../models/log-ingestion.bicep'
 
 targetScope = 'managementGroup'
 

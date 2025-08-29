@@ -36,7 +36,7 @@ param activityLogSettings ActivityLogSettings
 @description('Configuration settings for Microsoft Entra ID log collection and monitoring.')
 param entraIdLogSettings EntraIdLogSettings
 
-@description('List of IP addresses of Crowdstrike Falcon service. Please refer to https://falcon.crowdstrike.com/documentation/page/re07d589/add-crowdstrike-ip-addresses-to-cloud-provider-allowlists-0 for the IP address list of your Falcon region.')
+@description('List of IP addresses of CrowdStrike Falcon service. Please refer to https://falcon.crowdstrike.com/documentation/page/re07d589/add-crowdstrike-ip-addresses-to-cloud-provider-allowlists-0 for the IP address list of your Falcon region.')
 param falconIpAddresses array
 
 @description('List of Azure subscription IDs to monitor. These subscriptions will be configured for CrowdStrike monitoring.')

@@ -50,7 +50,7 @@ The Bicep templates perform the following actions:
    - [US-1](https://falcon.crowdstrike.com/cloud-security/registration-v2/azure)
    - [US-2](https://falcon.us-2.crowdstrike.com/cloud-security/registration-v2/azure)
    - [EU-1](https://falcon.eu-1.crowdstrike.com/cloud-security/registration-v2/azure)
-2. Ensure you have a CrowdStrike API URL, client ID, and client secret for Falcon Cloud Security with the CSPM Registration Read and Write scopes. If you don't already have API credentials, you can set them up in the Falcon console. You must be a Falcon Administrator to access the API clients page:
+2. Ensure you have a CrowdStrike API URL, client ID, and client secret for Falcon Cloud Security with `Cloud security Azure registration (Write)` scope. If you don't already have API credentials, you can set them up in the Falcon console. You must be a Falcon Administrator to access the API clients page:
    - [US-1](https://falcon.crowdstrike.com/api-clients-and-keys/)
    - [US-2](https://falcon.us-2.crowdstrike.com/api-clients-and-keys/)
    - [EU-1](https://falcon.eu-1.crowdstrike.com/api-clients-and-keys/clients)
